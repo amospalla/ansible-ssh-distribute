@@ -8,7 +8,7 @@
 
 - name: Set id_rsa_pub
   set_fact:
-  delegate_to: '{{ ssh_distribute_master_host }}'
+    ssh_distribute_master_host_id_rsa_pub: '{{ register_ssh_distribute_master_host_id_rsa_pub.stdout }}'
   when: inventory_hostname == ssh_distribute_master_host
 
 - name: Add id_rsa.pub to authorized_key
