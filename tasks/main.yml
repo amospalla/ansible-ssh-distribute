@@ -1,0 +1,5 @@
+---
+- name: include ssh-distribute.yml
+  include: ssh-distribute.yml
+  tags:
+    ssh_distribute

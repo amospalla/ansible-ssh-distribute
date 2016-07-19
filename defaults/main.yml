@@ -1,0 +1,3 @@
+---
+ssh_distribute_master_host_user: root
+ssh_distribute_slave_host_user: root

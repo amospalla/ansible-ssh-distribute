@@ -1,0 +1,5 @@
+---
+dependencies:
+  - role: ssh-create-key
+    ssh_create_key_user: '{{ ssh_distribute_master_host_user }}'
+    when: inventory_hostname == ssh_distribute_master_host

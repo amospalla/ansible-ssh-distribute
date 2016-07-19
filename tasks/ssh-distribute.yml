@@ -1,0 +1,18 @@
+---
+# ssh_create_key_home fact is created on role ssh-create-key
+- name: Read master host user's id_rsa.pub
+  command: cat {{ ssh_create_key_home }}/.ssh/id_rsa.pub
+  register: register_ssh_distribute_master_host_id_rsa_pub
+  changed_when: False
+  when: inventory_hostname == ssh_distribute_master_host
+
+- name: Set id_rsa_pub
+  set_fact:
+  delegate_to: '{{ ssh_distribute_master_host }}'
+  when: inventory_hostname == ssh_distribute_master_host
+
+- name: Add id_rsa.pub to authorized_key
+  authorized_key:
+    user: '{{ ssh_distribute_slave_host_user }}'
+    key: "{{ hostvars[ssh_distribute_master_host]['ssh_distribute_master_host_id_rsa_pub'] }}"
+  when: inventory_hostname != ssh_distribute_master_host
