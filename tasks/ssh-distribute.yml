@@ -15,4 +15,18 @@
   authorized_key:
     user: '{{ ssh_distribute_slave_host_user }}'
     key: "{{ hostvars[ssh_distribute_master_host]['ssh_distribute_master_host_id_rsa_pub'] }}"
-  when: inventory_hostname != ssh_distribute_master_host
+
+- name: Ensure ssh keys are in known_hosts
+  shell: ssh-keyscan {{ inventory_hostname }} {{ ansible_hostname }} >> {{ hostvars[ssh_distribute_master_host]['ssh_create_key_home'] }}/.ssh/known_hosts
+  changed_when: False
+  delegate_to: '{{ ssh_distribute_master_host }}'
+  when: ssh_distribute_add_known_hosts
+
+- name: Ensure ssh keys are in known hosts
+  known_hosts:
+    name: '{{ item }}'
+    state: present
+  with_items:
+    - '{{ inventory_hostname }}'
+    - '{{ ansible_hostname }}'
+  when: ssh_distribute_add_known_hosts
